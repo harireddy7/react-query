@@ -1,0 +1,84 @@
+{
+  "superheroes": [
+    {
+      "id": 1,
+      "name": "Batman",
+      "alterEgo": "Bruce Wayne"
+    },
+    {
+      "id": 2,
+      "name": "Superman",
+      "alterEgo": "Clark Kent"
+    },
+    {
+      "id": 3,
+      "name": "Wonder Woman",
+      "alterEgo": "Princess Diana"
+    },
+    {
+      "name": "The Flash",
+      "alterEgo": "Barry Allen",
+      "id": 4
+    },
+    {
+      "name": "Green Lantern",
+      "alterEgo": "Hal Jordan",
+      "id": 5
+    },
+    {
+      "name": "Green Arrow",
+      "alterEgo": "Oliver Queen",
+      "id": 6
+    },
+    {
+      "name": "Shazam!",
+      "alterEgo": "Billy Batson",
+      "id": 7
+    }
+  ],
+  "witcher": [
+    {
+      "id": 1,
+      "name": "Geralt of Rivia",
+      "key": "geralt"
+    },
+    {
+      "id": 2,
+      "name": "Yennefer of Vengerberg",
+      "key": "yen"
+    },
+    {
+      "id": 3,
+      "name": "Cirilla of Cintra"
+    }
+  ],
+  "places": [
+    {
+      "id": "geralt",
+      "visited": [
+        "Blavekin",
+        "Temeria",
+        "Cintra",
+        "Rhinde",
+        "Sodden"
+      ]
+    },
+    {
+      "id": "yen",
+      "visited": [
+        "Aretuza",
+        "Adeirn",
+        "Rhinde",
+        "Sodden"
+      ]
+    },
+    {
+      "id": "ciri",
+      "visited": [
+        "Cintra",
+        "Brokilon Forest",
+        "Sodden"
+      ]
+    }
+  ]
+}

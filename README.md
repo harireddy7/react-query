@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# react-query
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- react-query is used to manage server state effeciently
+- this will reduce the code needed to make api calls in react components
 
-## Available Scripts
 
-In the project directory, you can run:
+## Installation and setup
 
-### `npm start`
+```sh
+yarn add react-query
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Get started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+-import QueryClientProvider and wrap the app inside it similar to redux provider
+- import QueryClient and create an object out of it and pass it as `client` prop to QueryClientProvider
 
-### `npm test`
+```jsx
+import { QueryClientProvider, QueryClient } from 'react-query'
+const queryClient = new QueryClient();
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+return (
+    <QueryClientProvider client={queryClient}>
+        ...entire app goes here...
+    </QueryClientProvider>
+)
+```
 
-### `npm run build`
+## Make api calls with useQuery
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- useQuery is a hook that is used to make api calls.
+- It takes a queryKey and callback function that makes the api call and return a promise
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```js
+const { isLoading, data, isError, error } = useQuery('superheroes', () => {
+    <!-- returns a promise -->
+    return axios.get('...server url...')
+})
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+using `isLoading`, `isError, error` and `data`, we can manage jsx without ever using useEffect to update the local state
 
-### `npm run eject`
+## ReactQueryDevtools
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Use react quert dev tools component to load a toolbar where all the queries can be viewd similar to redux dev tools
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```jsx
+import { ReactQueryDevtools } from 'react-query/devtools'
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+// at bottom of jsx
+<ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+```
+### Query OOtions:
+#### 1. cacheTime
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- pass in options object as 3rd argument to useQuery like `{ cacheTime: 5000 }` to set cache to `5seconds`
+- After cache time, cache gets garbage collected and will have to refetch on next visit
+- Default value of cacheTime is `5minutes`
 
-## Learn More
+#### 2. staleTime
+- pass in staleTime in options object to let cache stay for some time to avoid making network calls
+- default staleTime is `0seconds`. so on each revisit, network call will be made
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### 3. refetchOnMount
+- used to fetch latest data on each time the component is mounted to dom, if cache is stale
+- true by default, false will not refetch
+- `always` will refetch irrespective of cache
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### 4. refetchOnWindowFocus
+- used to fetch latest data even app window comes into focus, if cache is stale
+- true by default, false will not refetch
+- `always` will refetch irrespective of cache
 
-### Code Splitting
+#### 5. refetchInterval
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- used to refetch fresh data after certain given time
 
-### Analyzing the Bundle Size
+## refetch
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- useQuery provides a `refetch` function that refectches the data again
+- we can pass this to click handler to refetch on click action
 
-### Making a Progressive Web App
+## success and error callbacks
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- onSuccess and onError props take callback functions to reports success/failure state of api
 
-### Advanced Configuration
+## transformation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Transform data received from api using `select` key which is a function
+- perform whatever transform and return the data to be used by components
